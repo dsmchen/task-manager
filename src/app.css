@@ -29,36 +29,6 @@ ul.task-list {
 	overflow-wrap: anywhere;
 }
 
-/* Task states */
-.done {
-	text-decoration: line-through;
-	color: #666;
-}
-
-/* Delete button */
-.del {
-	flex: none;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 1.75rem;
-	height: 1.75rem;
-	padding: 0;
-	border: none;
-	border-radius: 4px;
-	background: none;
-	color: #767676; /* 4.54:1 — clears the 3:1 non-text bar */
-	cursor: pointer;
-}
-.del:hover {
-	background: #fdecec;
-	color: #a33; /* 6.50:1 */
-}
-.del:focus-visible {
-	outline: 2px solid #a33;
-	outline-offset: 2px;
-}
-
 /* Utilities */
 .sr-only {
 	position: absolute;
