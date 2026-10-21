@@ -30,3 +30,8 @@ ul.task-list {
 	white-space: nowrap;
 	border: 0;
 }
+
+.done {
+	text-decoration: line-through;
+	color: #999;
+}

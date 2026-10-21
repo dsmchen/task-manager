@@ -41,7 +41,7 @@
 		<li>
 			<label>
 				<input type="checkbox" bind:checked={task.done} />
-				{task.text}
+				<span class:done={task.done}>{task.text}</span>
 			</label>
 		</li>
 	{/each}
