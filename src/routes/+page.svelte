@@ -31,10 +31,18 @@
 		addTask();
 	}}
 >
-	<input type="text" bind:value={newTaskText} placeholder="New task..." />
-	<button type="submit">Add</button>
+	<label for="new-task" class="sr-only">New task</label>
+	<input id="new-task" type="text" bind:value={newTaskText} />
+	<button type="submit">Add task</button>
 </form>
 
-{#each tasks as task (task.id)}
-	<p>{task.done ? '✓' : '○'} {task.text}</p>
-{/each}
+<ul class="task-list" role="list">
+	{#each tasks as task (task.id)}
+		<li>
+			<label>
+				<input type="checkbox" bind:checked={task.done} />
+				{task.text}
+			</label>
+		</li>
+	{/each}
+</ul>
