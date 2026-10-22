@@ -48,8 +48,4 @@
 		background: #fdecec;
 		color: #a33; /* 6.50:1 */
 	}
-	.del:focus-visible {
-		outline: 2px solid #a33;
-		outline-offset: 2px;
-	}
 </style>

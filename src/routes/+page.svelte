@@ -22,6 +22,26 @@
 	function deleteTask(id: number) {
 		tasks = tasks.filter((t) => t.id !== id);
 	}
+
+	type Filter = 'all' | 'active' | 'done';
+
+	const FILTERS: Filter[] = ['all', 'active', 'done'];
+
+	const filterFns: Record<Filter, (t: Task) => boolean> = {
+		all: () => true,
+		active: (t) => !t.done,
+		done: (t) => t.done
+	};
+
+	const emptyMessages: Record<Filter, string> = {
+		all: 'No tasks. Add one above.',
+		active: "No active tasks. Everything's done.",
+		done: 'No completed tasks yet.'
+	};
+
+	let filter = $state<Filter>('all');
+	let visibleTasks = $derived(tasks.filter(filterFns[filter]));
+	let emptyMessage = $derived(tasks.length === 0 ? emptyMessages.all : emptyMessages[filter]);
 </script>
 
 <h1>Task Manager</h1>
@@ -37,10 +57,25 @@
 	<button type="submit">Add task</button>
 </form>
 
+<div class="filters" role="group" aria-label="Filter tasks">
+	{#each FILTERS as f (f)}
+		<button
+			type="button"
+			class:active={filter === f}
+			aria-pressed={filter === f}
+			onclick={() => {
+				filter = f;
+			}}>{f}</button
+		>
+	{/each}
+</div>
+
 <ul class="task-list" role="list">
-	{#each tasks as task (task.id)}
+	{#each visibleTasks as task (task.id)}
 		<li>
 			<TaskItem {task} onDelete={() => deleteTask(task.id)} />
 		</li>
+	{:else}
+		<li class="empty">{emptyMessage}</li>
 	{/each}
 </ul>
