@@ -8,7 +8,13 @@
 	<input type="checkbox" bind:checked={task.done} />
 	<span class:done={task.done}>{task.text}</span>
 </label>
-<button type="button" class="del" aria-label={`Delete: ${task.text}`} onclick={onDelete}>
+<button
+	type="button"
+	class="del"
+	id={`delete-${task.id}`}
+	aria-label={`Delete: ${task.text}`}
+	onclick={onDelete}
+>
 	<svg
 		viewBox="0 0 24 24"
 		width="16"

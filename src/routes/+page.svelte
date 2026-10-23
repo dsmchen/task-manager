@@ -14,6 +14,7 @@
 	]);
 
 	let newTaskText = $state('');
+	let inputEl = $state<HTMLInputElement>();
 
 	function addTask() {
 		const title = newTaskText.trim();
@@ -23,7 +24,17 @@
 	}
 
 	function deleteTask(id: number) {
+		const index = visibleTasks.findIndex((t) => t.id === id);
+		const remaining = visibleTasks.filter((t) => t.id !== id);
+		const nextId = remaining[index]?.id ?? remaining[index - 1]?.id;
+
 		tasks = tasks.filter((t) => t.id !== id);
+
+		if (nextId !== undefined) {
+			document.getElementById(`delete-${nextId}`)?.focus();
+		} else {
+			inputEl?.focus();
+		}
 	}
 
 	type Filter = 'all' | 'active' | 'done';
@@ -57,7 +68,7 @@
 	}}
 >
 	<label for="new-task" class="sr-only">New task</label>
-	<input id="new-task" type="text" bind:value={newTaskText} />
+	<input id="new-task" type="text" bind:value={newTaskText} bind:this={inputEl} />
 	<button type="submit">Add task</button>
 </form>
 
