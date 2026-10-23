@@ -50,6 +50,10 @@ form {
 .empty {
 	text-align: center;
 	color: #767676; /* 4.54:1 — matches the .del muted color */
+	margin-block: 0;
+}
+.empty.has-text {
+	margin-block: 1em;
 }
 
 /* Task list */

@@ -45,6 +45,7 @@
 	let filter = $state<Filter>('all');
 	let visibleTasks = $derived(tasks.filter(filterFns[filter]));
 	let emptyMessage = $derived(tasks.length === 0 ? emptyMessages.all : emptyMessages[filter]);
+	let isEmpty = $derived(visibleTasks.length === 0);
 </script>
 
 <h1>Task Manager</h1>
@@ -73,7 +74,7 @@
 	{/each}
 </div>
 
-{#if visibleTasks.length > 0}
+{#if !isEmpty}
 	<ul class="task-list" role="list">
 		{#each visibleTasks as task (task.id)}
 			<li
@@ -84,8 +85,8 @@
 			</li>
 		{/each}
 	</ul>
-{:else}
-	<p class="empty">
-		{emptyMessage}
-	</p>
 {/if}
+
+<p class="empty" class:has-text={isEmpty} role="status">
+	{isEmpty ? emptyMessage : ''}
+</p>
