@@ -8,10 +8,20 @@
 	let lastId = 0;
 	const newId = () => ++lastId;
 
-	let tasks = $state<Task[]>([
-		{ id: newId(), text: 'First task', done: false },
-		{ id: newId(), text: 'Second task', done: true }
-	]);
+	function loadInitialTasks(): Task[] {
+		const raw = localStorage.getItem('tasks');
+		if (raw) {
+			const parsed = JSON.parse(raw) as Task[];
+			lastId = parsed.reduce((max, t) => Math.max(max, t.id), 0);
+			return parsed;
+		}
+		return [
+			{ id: newId(), text: 'First task', done: false },
+			{ id: newId(), text: 'Second task', done: true }
+		];
+	}
+
+	let tasks = $state<Task[]>(loadInitialTasks());
 
 	let newTaskText = $state('');
 	let inputEl = $state<HTMLInputElement>();
@@ -36,6 +46,10 @@
 			inputEl?.focus();
 		}
 	}
+
+	$effect(() => {
+		localStorage.setItem('tasks', JSON.stringify(tasks));
+	});
 
 	type Filter = 'all' | 'active' | 'done';
 
