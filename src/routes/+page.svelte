@@ -73,17 +73,19 @@
 	{/each}
 </div>
 
-<ul class="task-list" role="list">
-	{#each visibleTasks as task (task.id)}
-		<li
-			transition:fade={prefersReducedMotion.current ? { duration: 0 } : { duration: 150 }}
-			animate:flip={prefersReducedMotion.current ? { duration: 0 } : {}}
-		>
-			<TaskItem {task} onDelete={() => deleteTask(task.id)} />
-		</li>
-	{:else}
-		<li class="empty">
-			{emptyMessage}
-		</li>
-	{/each}
-</ul>
+{#if visibleTasks.length > 0}
+	<ul class="task-list" role="list">
+		{#each visibleTasks as task (task.id)}
+			<li
+				transition:fade={prefersReducedMotion.current ? { duration: 0 } : { duration: 150 }}
+				animate:flip={prefersReducedMotion.current ? { duration: 0 } : {}}
+			>
+				<TaskItem {task} onDelete={() => deleteTask(task.id)} />
+			</li>
+		{/each}
+	</ul>
+{:else}
+	<p class="empty">
+		{emptyMessage}
+	</p>
+{/if}
