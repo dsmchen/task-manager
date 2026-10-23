@@ -1,6 +1,9 @@
 <script lang="ts">
 	import TaskItem from '#lib/components/TaskItem.svelte';
 	import type { Task } from '#lib/types.ts';
+	import { fade } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
+	import { prefersReducedMotion } from 'svelte/motion';
 
 	let lastId = 0;
 	const newId = () => ++lastId;
@@ -72,10 +75,15 @@
 
 <ul class="task-list" role="list">
 	{#each visibleTasks as task (task.id)}
-		<li>
+		<li
+			transition:fade={prefersReducedMotion.current ? { duration: 0 } : { duration: 150 }}
+			animate:flip={prefersReducedMotion.current ? { duration: 0 } : {}}
+		>
 			<TaskItem {task} onDelete={() => deleteTask(task.id)} />
 		</li>
 	{:else}
-		<li class="empty">{emptyMessage}</li>
+		<li class="empty">
+			{emptyMessage}
+		</li>
 	{/each}
 </ul>
