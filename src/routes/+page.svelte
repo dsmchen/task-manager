@@ -1,6 +1,7 @@
 <script lang="ts">
+	import Toolbar from '#lib/components/Toolbar.svelte';
 	import TaskItem from '#lib/components/TaskItem.svelte';
-	import type { Task } from '#lib/types.ts';
+	import type { Task, Filter } from '#lib/types.ts';
 	import { fade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import { prefersReducedMotion } from 'svelte/motion';
@@ -51,10 +52,6 @@
 		localStorage.setItem('tasks', JSON.stringify(tasks));
 	});
 
-	type Filter = 'all' | 'active' | 'done';
-
-	const FILTERS: Filter[] = ['all', 'active', 'done'];
-
 	const filterFns: Record<Filter, (t: Task) => boolean> = {
 		all: () => true,
 		active: (t) => !t.done,
@@ -71,6 +68,8 @@
 	let visibleTasks = $derived(tasks.filter(filterFns[filter]));
 	let emptyMessage = $derived(tasks.length === 0 ? emptyMessages.all : emptyMessages[filter]);
 	let isEmpty = $derived(visibleTasks.length === 0);
+	let activeCount = $derived(tasks.filter((t) => !t.done).length);
+	let doneCount = $derived(tasks.length - activeCount);
 </script>
 
 <h1>Task Manager</h1>
@@ -86,18 +85,18 @@
 	<button type="submit">Add task</button>
 </form>
 
-<div class="filters" role="group" aria-label="Filter tasks">
-	{#each FILTERS as f (f)}
-		<button
-			type="button"
-			class:active={filter === f}
-			aria-pressed={filter === f}
-			onclick={() => {
-				filter = f;
-			}}>{f}</button
-		>
-	{/each}
-</div>
+<Toolbar
+	{activeCount}
+	{doneCount}
+	{filter}
+	onFilterChange={(f) => {
+		filter = f;
+	}}
+	onClear={() => {
+		tasks = tasks.filter((t) => !t.done);
+		inputEl?.focus();
+	}}
+/>
 
 {#if !isEmpty}
 	<ul class="task-list" role="list">

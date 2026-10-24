@@ -3,3 +3,4 @@ export interface Task {
 	text: string;
 	done: boolean;
 }
+export type Filter = 'all' | 'active' | 'done';
